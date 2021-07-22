@@ -56,43 +56,62 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
-            ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: modelList.length,
-                itemBuilder: (context, index) {
-                  final item = modelList[index];
-                  return Dismissible(
-                    key: Key(item.title),
-                    onDismissed: (direction) {
-                      setState(() {
-                        modelList.removeAt(index);
-                      });
-                    },
+            modelList.isEmpty
+                ? Container(
+                    height: screenHeight,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth / 15,
-                          ),
-                          child: Theme(
-                            data: ThemeData(
-                                splashColor: Colors.white.withOpacity(0.3)),
-                            child: listItemMethod(modelList, index),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: screenWidth / 15, right: screenWidth / 15),
-                          child: Divider(),
-                        ),
+                        GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CreateTask()));
+                            },
+                            child: Image.asset("assets/img/no_task.png")),
                       ],
                     ),
-                    background: Container(
-                      color: Colors.red,
-                    ),
-                  );
-                })
+                  )
+                : ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: modelList.length,
+                    itemBuilder: (context, index) {
+                      final item = modelList[index];
+                      return Dismissible(
+                        key: Key(item.title),
+                        onDismissed: (direction) {
+                          setState(() {
+                            modelList.removeAt(index);
+                          });
+                        },
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: screenWidth / 15,
+                              ),
+                              child: Theme(
+                                data: ThemeData(
+                                    splashColor: Colors.white.withOpacity(0.3)),
+                                child: listItemMethod(modelList, index),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: screenWidth / 15,
+                                  right: screenWidth / 15),
+                              child: Divider(),
+                            ),
+                          ],
+                        ),
+                        background: Container(
+                          color: Colors.red,
+                        ),
+                      );
+                    })
           ],
         ),
       ),
