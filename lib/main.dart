@@ -30,15 +30,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool value = false;
-  List<String> listItems = ["alma", "armud"];
   List<TaskModel> modelList = TaskModel.modelList;
   @override
   Widget build(BuildContext context) {
     var screenDetail = MediaQuery.of(context);
     final double screenWidth = screenDetail.size.width;
     final double screenHeight = screenDetail.size.height;
-
-    print("alma");
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -88,13 +85,12 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xffF44235),
         onPressed: () {
-          setState(() {
-            modelList.add(TaskModel(
-                id: 3, title: "Qarpzi", content: "content", isCompleted: true));
-          });
-          print(listItems.toList());
-          // Navigator.push(
-          //     context, MaterialPageRoute(builder: (context) => CreateTask()));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateTask(),
+            ),
+          );
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),
@@ -111,6 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   : TextDecoration.none)),
       trailing: Checkbox(
           value: listItems[index].isCompleted,
+          activeColor: Color(0xffF54231),
           onChanged: (val) {
             setState(() {
               listItems[index].isCompleted = val!;

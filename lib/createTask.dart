@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo/infrastructure/models/task_model.dart';
+import 'package:todo/main.dart';
 
 class CreateTask extends StatefulWidget {
   CreateTask({Key? key}) : super(key: key);
@@ -8,6 +10,8 @@ class CreateTask extends StatefulWidget {
 }
 
 class _CreateTaskState extends State<CreateTask> {
+  TextEditingController textController = new TextEditingController();
+  String input = "";
   @override
   Widget build(BuildContext context) {
     var screenDetail = MediaQuery.of(context);
@@ -30,32 +34,18 @@ class _CreateTaskState extends State<CreateTask> {
               CustomInput(
                 screenHeight: screenHeight,
                 hinText: "Task Name",
+                textController: textController,
               ),
-              CustomInput(
-                screenHeight: screenHeight,
-                hinText: "Task Type",
-              ),
-              InputButton(screenWidth: screenWidth, screenHeight: screenHeight)
+              inputButton(screenWidth, screenHeight, context),
             ],
           ),
         ),
       ),
     );
   }
-}
 
-class InputButton extends StatelessWidget {
-  const InputButton({
-    Key? key,
-    required this.screenWidth,
-    required this.screenHeight,
-  }) : super(key: key);
-
-  final double screenWidth;
-  final double screenHeight;
-
-  @override
-  Widget build(BuildContext context) {
+  SizedBox inputButton(
+      double screenWidth, double screenHeight, BuildContext context) {
     return SizedBox(
       width: screenWidth / 1.1,
       height: screenHeight / 12,
@@ -70,7 +60,17 @@ class InputButton extends StatelessWidget {
               fontSize: screenWidth / 20, fontWeight: FontWeight.bold),
         ),
         onPressed: () {
-          print("object");
+          setState(() {
+            input = textController.text;
+          });
+          TaskModel.modelList.add(TaskModel(
+              id: 4, title: input, content: "salam", isCompleted: false));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MyApp(),
+            ),
+          );
         },
       ),
     );
@@ -78,20 +78,22 @@ class InputButton extends StatelessWidget {
 }
 
 class CustomInput extends StatelessWidget {
-  const CustomInput({
+  CustomInput({
     Key? key,
     required this.screenHeight,
     required this.hinText,
+    required this.textController,
   }) : super(key: key);
 
   final double screenHeight;
   final String hinText;
-
+  TextEditingController textController = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(bottom: screenHeight / 25),
       child: TextField(
+        controller: textController,
         decoration: InputDecoration(
             // hintText: hinText,
             labelText: hinText,
