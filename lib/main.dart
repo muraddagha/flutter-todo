@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/createTask.dart';
+import 'package:todo/infrastructure/models/task_model.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,12 +30,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool value = false;
+  List<String> listItems = ["alma", "armud"];
+  List<TaskModel> modelList = TaskModel.modelList;
   @override
   Widget build(BuildContext context) {
     var screenDetail = MediaQuery.of(context);
-    var listItems = ["alma", "armud"];
     final double screenWidth = screenDetail.size.width;
     final double screenHeight = screenDetail.size.height;
+
+    print("alma");
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -55,17 +59,18 @@ class _MyHomePageState extends State<MyHomePage> {
             ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: listItems.length,
+                itemCount: modelList.length,
                 itemBuilder: (context, index) {
                   return Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(
-                            left: screenWidth / 15, right: screenWidth / 15),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: screenWidth / 15,
+                        ),
                         child: Theme(
                           data: ThemeData(
                               splashColor: Colors.white.withOpacity(0.3)),
-                          child: listItemMethod(listItems, index),
+                          child: listItemMethod(modelList, index),
                         ),
                       ),
                       Padding(
@@ -83,8 +88,13 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xffF44235),
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => CreateTask()));
+          setState(() {
+            modelList.add(TaskModel(
+                id: 3, title: "Qarpzi", content: "content", isCompleted: true));
+          });
+          print(listItems.toList());
+          // Navigator.push(
+          //     context, MaterialPageRoute(builder: (context) => CreateTask()));
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),
@@ -92,17 +102,18 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  ListTile listItemMethod(List<String> listItems, int index) {
+  ListTile listItemMethod(List<TaskModel> listItems, int index) {
     return ListTile(
-      title: Text(listItems[index],
+      title: Text(listItems[index].title,
           style: TextStyle(
-              decoration:
-                  value ? TextDecoration.lineThrough : TextDecoration.none)),
+              decoration: listItems[index].isCompleted
+                  ? TextDecoration.lineThrough
+                  : TextDecoration.none)),
       trailing: Checkbox(
-          value: value,
+          value: listItems[index].isCompleted,
           onChanged: (val) {
             setState(() {
-              this.value = val!;
+              listItems[index].isCompleted = val!;
             });
           }),
       subtitle: Text(
@@ -111,7 +122,8 @@ class _MyHomePageState extends State<MyHomePage> {
             decoration:
                 value ? TextDecoration.lineThrough : TextDecoration.none),
       ),
-      onTap: () => setState(() => this.value = !value),
+      onTap: () => setState(
+          () => listItems[index].isCompleted = !listItems[index].isCompleted),
     );
   }
 }

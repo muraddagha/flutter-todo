@@ -61,7 +61,7 @@ class InputButton extends StatelessWidget {
       height: screenHeight / 12,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: Color(0xffF44235),
+            primary: const Color(0xffF44235),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(60)))),
         child: Text(
