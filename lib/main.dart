@@ -31,6 +31,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool value = false;
   List<TaskModel> modelList = TaskModel.modelList;
+
   @override
   Widget build(BuildContext context) {
     var screenDetail = MediaQuery.of(context);
@@ -49,7 +50,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       left: screenWidth / 10,
                       right: screenWidth / 10),
                   child: HomeHeader(
-                      screenHeight: screenHeight, screenWidth: screenWidth),
+                    screenHeight: screenHeight,
+                    screenWidth: screenWidth,
+                  ),
                 ),
               ],
             ),
@@ -58,30 +61,41 @@ class _MyHomePageState extends State<MyHomePage> {
                 shrinkWrap: true,
                 itemCount: modelList.length,
                 itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth / 15,
+                  final item = modelList[index];
+                  return Dismissible(
+                    key: Key(item.title),
+                    onDismissed: (direction) {
+                      setState(() {
+                        modelList.removeAt(index);
+                      });
+                    },
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth / 15,
+                          ),
+                          child: Theme(
+                            data: ThemeData(
+                                splashColor: Colors.white.withOpacity(0.3)),
+                            child: listItemMethod(modelList, index),
+                          ),
                         ),
-                        child: Theme(
-                          data: ThemeData(
-                              splashColor: Colors.white.withOpacity(0.3)),
-                          child: listItemMethod(modelList, index),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: screenWidth / 15, right: screenWidth / 15),
+                          child: Divider(),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: screenWidth / 15, right: screenWidth / 15),
-                        child: Divider(),
-                      ),
-                    ],
+                      ],
+                    ),
+                    background: Container(
+                      color: Colors.red,
+                    ),
                   );
                 })
           ],
         ),
       ),
-
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xffF44235),
         onPressed: () {
@@ -94,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 
@@ -116,8 +130,9 @@ class _MyHomePageState extends State<MyHomePage> {
       subtitle: Text(
         "Jun 05,2021 * Low",
         style: TextStyle(
-            decoration:
-                value ? TextDecoration.lineThrough : TextDecoration.none),
+            decoration: listItems[index].isCompleted
+                ? TextDecoration.lineThrough
+                : TextDecoration.none),
       ),
       onTap: () => setState(
           () => listItems[index].isCompleted = !listItems[index].isCompleted),

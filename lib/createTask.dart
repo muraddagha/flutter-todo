@@ -11,6 +11,7 @@ class CreateTask extends StatefulWidget {
 
 class _CreateTaskState extends State<CreateTask> {
   TextEditingController textController = new TextEditingController();
+
   String input = "";
   @override
   Widget build(BuildContext context) {
@@ -63,8 +64,8 @@ class _CreateTaskState extends State<CreateTask> {
           setState(() {
             input = textController.text;
           });
-          TaskModel.modelList.add(TaskModel(
-              id: 4, title: input, content: "salam", isCompleted: false));
+          TaskModel.modelList.add(
+              TaskModel(title: input, content: "salam", isCompleted: false));
           Navigator.push(
             context,
             MaterialPageRoute(
