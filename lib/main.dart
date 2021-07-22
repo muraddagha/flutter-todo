@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/createTask.dart';
+import 'package:todo/editTask.dart';
 import 'package:todo/infrastructure/models/task_model.dart';
 
 void main() {
@@ -155,6 +156,16 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       onTap: () => setState(
           () => listItems[index].isCompleted = !listItems[index].isCompleted),
+      onLongPress: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditTask(
+              title: listItems[index].title,
+            ),
+          ),
+        );
+      },
     );
   }
 }
